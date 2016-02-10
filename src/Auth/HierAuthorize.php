@@ -171,7 +171,7 @@ class HierAuthorize extends BaseAuthorize
             // recursively go through roles
             if (is_array($subRole)) {
                 $subRole = $this->_parseHierarchy($subRole);
-                $hierarchy[$key] = array_unique($subRole); // remove duplicate roles
+                $hierarchy[$key] = array_unique($subRole, SORT_REGULAR); // remove duplicate roles
             } else {
                 // flatten references
                 if (substr($subRole, 0, strlen($this->_referenceSign)) == $this->_referenceSign) {
