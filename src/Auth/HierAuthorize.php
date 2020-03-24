@@ -41,19 +41,19 @@ class HierAuthorize extends BaseAuthorize
     {
         parent::__construct($registry, $config);
 
-        if (!file_exists(CONFIG . $this->config('hierarchyFile'))) {
+        if (!file_exists(CONFIG . $this->getConfig('hierarchyFile'))) {
             throw new Exception(
-                sprintf("Provided hierarchy config file %s doesn't exist.", $this->config('hierarchyFile'))
+                sprintf("Provided hierarchy config file %s doesn't exist.", $this->getConfig('hierarchyFile'))
             );
         }
 
-        if (!file_exists(CONFIG . $this->config('aclFile'))) {
-            throw new Exception(sprintf("Provided ACL config file %s doesn't exist.", $this->config('aclFile')));
+        if (!file_exists(CONFIG . $this->getConfig('aclFile'))) {
+            throw new Exception(sprintf("Provided ACL config file %s doesn't exist.", $this->getConfig('aclFile')));
         }
 
         // caching
-        $hierarchyModified = filemtime(CONFIG . $this->config('hierarchyFile'));
-        $aclModified = filemtime(CONFIG . $this->config('aclFile'));
+        $hierarchyModified = filemtime(CONFIG . $this->getConfig('hierarchyFile'));
+        $aclModified = filemtime(CONFIG . $this->getConfig('aclFile'));
 
         $lastModified = ($hierarchyModified > $aclModified) ? $hierarchyModified : $aclModified;
 
@@ -128,7 +128,7 @@ class HierAuthorize extends BaseAuthorize
      */
     protected function _getHierarchy()
     {
-        $file = $this->config('hierarchyFile');
+        $file = $this->getConfig('hierarchyFile');
 
         $yaml = file_get_contents(CONFIG . $file);
         try {
@@ -206,7 +206,7 @@ class HierAuthorize extends BaseAuthorize
      */
     protected function _getAcl()
     {
-        $file = $this->config('aclFile');
+        $file = $this->getConfig('aclFile');
 
         $yaml = file_get_contents(CONFIG . $file);
         try {
@@ -314,25 +314,25 @@ class HierAuthorize extends BaseAuthorize
     protected function _getRoles(array $user)
     {
         // check if json column based authentication
-        if ($this->config('roleColumn')) {
-            if (!isset($user[$this->config('roleColumn')])) {
+        if ($this->getConfig('roleColumn')) {
+            if (!isset($user[$this->getConfig('roleColumn')])) {
                 throw new Exception(
-                    sprintf('Provided roleColumn "%s" doesn\'t exist for this user.', $this->config('roleColumn'))
+                    sprintf('Provided roleColumn "%s" doesn\'t exist for this user.', $this->getConfig('roleColumn'))
                 );
             }
 
-            $roles = $user[$this->config('roleColumn')];
+            $roles = $user[$this->getConfig('roleColumn')];
             // check if column is received already decoded, if not, json decode.
             if (!is_array($roles)) {
                 $roles = json_decode($roles, true);
                 if (!is_array($roles)) {
                     throw new Exception(
-                        sprintf('roleColumn "%s" is not in a valid format.', $this->config('roleColumn'))
+                        sprintf('roleColumn "%s" is not in a valid format.', $this->getConfig('roleColumn'))
                     );
                 }
             }
         } else {
-            $roleKeys = $this->config('roleKeys');
+            $roleKeys = $this->getConfig('roleKeys');
 
             // check if role keys are configured correctly
             if (!is_array($roleKeys)) {
