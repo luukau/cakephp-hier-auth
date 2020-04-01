@@ -45,7 +45,7 @@ class AuthHelper extends Helper {
      * @return array|null containing general user info
      */
     public function user() {
-        $user = $this->request->session()->read('Auth.User');
+        $user = $this->getView()->getRequest()->getSession()->read('Auth.User');
         if ( isset ($user) ) {
             return $user;
         }
