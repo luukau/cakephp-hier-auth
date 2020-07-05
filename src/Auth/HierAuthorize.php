@@ -77,10 +77,10 @@ class HierAuthorize extends BaseAuthorize
      */
     public function authorize($user, Request $request)
     {
-        $controller = $request->param('controller');
-        $action = $request->param('action');
+        $controller = $request->getParam('controller');
+        $action = $request->getParam('action');
         // Allow for Cake's prefix routes
-        $prefix = $request->param('prefix');
+        $prefix = $request->getParam('prefix');
         if ( $prefix && !empty($prefix) ) {
             $controller = $prefix . '/' . $controller;
         }
